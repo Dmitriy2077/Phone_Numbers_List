@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
         <activity
-            android:name=".EmployeesListActivity"
+            android:name=".employee.EmployeesListActivity"
             android:exported="false" />
         <activity
-            android:name=".DepartmentListActivity"
+            android:name=".department.DepartmentListActivity"
             android:exported="false" />
         <activity
             android:name=".LaunchActivity"
@@ -24,9 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

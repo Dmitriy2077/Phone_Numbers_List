@@ -1,5 +1,7 @@
 <resources>
+    <!-- Global strings -->
     <string name="app_name">App</string>
+    <string name="empty"/>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -10,9 +12,23 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <!-- Strings related to launch -->
-    <string name="hide_email">E-mail</string>
-    <string name="hide_password">Password</string>
-    <string name="btn_registration">Sign up</string>
-    <string name="btn_login">Sign in</string>
+    <string name="appbar_launch">Телефонный справочник УП \"Мингаз\"</string>
+    <string name="hide_login">ФИО</string>
+    <string name="hide_password">Табельный номер/Пароль</string>
+    <string name="btn_registration">Регистрация</string>
+    <string name="btn_login">Вход</string>
+
+    <string name="appbar_dep_list">УП \"Мингаз\" - Подразделения</string>
+
+    <string name="flower1_name">Rose</string>
+    <string name="flower2_name">Freesia</string>
+    <string name="flower3_name">Lily</string>
+    <string name="flower4_name">Sunflower</string>
+    <string name="flower5_name">Peony</string>
+    <string name="flower6_name">Daisy</string>
+    <string name="flower7_name">Lilac</string>
+    <string name="flower8_name">Marigold</string>
+    <string name="flower9_name">Poppy</string>
+    <string name="flower10_name">Daffodil</string>
 
 </resources>
