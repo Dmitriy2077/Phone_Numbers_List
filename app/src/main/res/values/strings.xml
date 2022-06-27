@@ -1,7 +1,7 @@
 <resources>
     <!-- Global strings -->
     <string name="app_name">App</string>
-    <string name="empty"/>
+    <string name="empty" />
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

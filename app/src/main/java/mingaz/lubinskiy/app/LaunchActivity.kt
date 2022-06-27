@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import mingaz.lubinskiy.app.department.DepartmentListActivity
+import mingaz.lubinskiy.app.department.DepartmentsListActivity
 
 
 class LaunchActivity : AppCompatActivity() {
@@ -14,7 +14,7 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     fun onClick(v: View?) {
-        val intent = Intent(this, DepartmentListActivity::class.java)
+        val intent = Intent(this, DepartmentsListActivity::class.java)
         startActivity(intent)
     }
 }

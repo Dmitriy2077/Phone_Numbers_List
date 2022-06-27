@@ -10,10 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
         <activity
+            android:name=".employee.EmployeeInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".employee.EmployeesListActivity"
             android:exported="false" />
         <activity
-            android:name=".department.DepartmentListActivity"
+            android:name=".department.DepartmentsListActivity"
             android:exported="false" />
         <activity
             android:name=".LaunchActivity"

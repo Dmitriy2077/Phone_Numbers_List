@@ -3,21 +3,22 @@ package mingaz.lubinskiy.app.department
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
+import mingaz.lubinskiy.app.OnItemClickListener
 import mingaz.lubinskiy.app.R
 import mingaz.lubinskiy.app.employee.EmployeesListActivity
 import java.util.*
 
+
 /*const val FLOWER_ID = "flower id"
 const val FLOWER_NAME = "name"
 const val FLOWER_DESCRIPTION = "description"*/
-const val EMPLOYEE_NAME = "e_name"
+const val DEPARTMENT_NAME = "departmentName"
 
-class DepartmentListActivity : AppCompatActivity() {
+class DepartmentsListActivity : AppCompatActivity() {
     // creating variables for our ui components.
     private lateinit var departmentRV: RecyclerView
 
@@ -29,41 +30,42 @@ class DepartmentListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_department_list)
+        setContentView(R.layout.activity_departments_list)
         setSupportActionBar(findViewById(R.id.app_toolbar))
-    // calling method to build recycler view.
+        // calling method to build recycler view.
         buildRecyclerView()
     }
 
     private fun buildRecyclerView() {
 
         // initializing our variables.
-        departmentRV = findViewById(R.id.recyclerView_dep_list)
+        departmentRV = findViewById(R.id.departments_list_rv)
         // below line we are creating a new array list
         departmentsArrayList = ArrayList()
+        departmentsArrayList = departmentsList()
 
         // below line is to add data to our array list.
-        departmentsArrayList.add(Department(1, "First Member"))
+        /*departmentsArrayList.add(Department(1, "First Member"))
         departmentsArrayList.add(Department(2, "Second Member"))
         departmentsArrayList.add(Department(3, "Third Member"))
         departmentsArrayList.add(Department(4, "Fourth Member"))
-        departmentsArrayList.add(Department(5, "Fifth Member"))
+        departmentsArrayList.add(Department(5, "Fifth Member"))*/
 
         // initializing our adapter class.
         departmentsAdapter = DepartmentsAdapter(departmentsArrayList)
 
         // setting adapter to our recycler view.
         departmentRV.adapter = departmentsAdapter
-        departmentsAdapter.setOnClickListener(object : DepartmentsAdapter.onItemClickListener {
+        departmentsAdapter.setOnClickListener(object : OnItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(
+                /*Toast.makeText(
                     this@DepartmentListActivity,
                     "OnClick - $position",
                     Toast.LENGTH_LONG
-                ).show()
-                val intent = Intent(this@DepartmentListActivity, EmployeesListActivity::class.java)
-                val eName = departmentsArrayList[position].name
-                intent.putExtra(EMPLOYEE_NAME, eName)
+                ).show()*/
+                val intent = Intent(this@DepartmentsListActivity, EmployeesListActivity::class.java)
+                val departmentName = departmentsArrayList[position].name
+                intent.putExtra(DEPARTMENT_NAME, departmentName)
                 startActivity(intent)
             }
         })
