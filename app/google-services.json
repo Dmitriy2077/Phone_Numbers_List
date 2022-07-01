@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "998396397844",
+    "project_id": "mingaz-phone-numbers",
+    "storage_bucket": "mingaz-phone-numbers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998396397844:android:aea24dc5e593a6d3705a01",
+        "android_client_info": {
+          "package_name": "mingaz.lubinskiy.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998396397844-a06rb6tri6b6isrtv7afeibq0cbmi48k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAitQAxrWLPCnlInhgpPOCHZJdMLn_ol3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998396397844-a06rb6tri6b6isrtv7afeibq0cbmi48k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
