@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +17,9 @@ class EmployeeInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employee_info)
         val toolbar = findViewById<Toolbar>(R.id.employee_info_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val bundle: Bundle = intent.extras!!
         val employeeName = bundle.get(EMPLOYEE_NAME).toString()
         toolbar?.title = employeeName
@@ -26,5 +30,12 @@ class EmployeeInfoActivity : AppCompatActivity() {
         intent.data = Uri.parse("tel:+375001234567")
         //intent.data = Uri.parse(v?.text.toString())
         startActivity(intent)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home){
+            onBackPressed()
+        }
+        return true
     }
 }
