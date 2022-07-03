@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import mingaz.lubinskiy.app.OnItemClickListener
@@ -22,12 +23,14 @@ class EmployeesListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employees_list)
         val toolbar = findViewById<Toolbar>(R.id.employee_toolbar)
+        val title = findViewById<TextView>(R.id.title_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val bundle: Bundle = intent.extras!!
         val eName = bundle.get(DEPARTMENT_NAME).toString()
-        toolbar?.title = eName
+        title.text = eName
+        title.isSelected = true
         buildRecyclerView()
     }
 

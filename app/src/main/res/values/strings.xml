@@ -1,6 +1,7 @@
 <resources>
     <!-- Global strings -->
     <string name="app_name">Мингаз</string>
+    <string name="db_url">https://mingaz-phone-numbers-default-rtdb.europe-west1.firebasedatabase.app/</string>
     <string name="empty" />
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -11,7 +12,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <!-- Strings related to launch -->
     <string name="appbar_launch">Телефонный справочник УП \"Мингаз\"</string>
     <string name="hide_login">Фамилия Имя Отчество</string>
     <string name="hide_password">Табельный номер(? цифр)</string>

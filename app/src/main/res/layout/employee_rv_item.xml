@@ -19,15 +19,15 @@
             android:padding="8dp"
             android:text="@string/flower1_name"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/employee_position"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="6dp"
             android:text="@string/flower1_name"
-            android:textColor="@color/black"
+            android:textColor="@android:color/secondary_text_light"
             android:textSize="14sp"
             android:textStyle="italic" />
     </LinearLayout>

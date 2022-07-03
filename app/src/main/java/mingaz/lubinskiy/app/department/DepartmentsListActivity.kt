@@ -31,7 +31,7 @@ class DepartmentsListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_departments_list)
-        setSupportActionBar(findViewById(R.id.app_toolbar))
+        setSupportActionBar(findViewById(R.id.departments_toolbar))
         // calling method to build recycler view.
         buildRecyclerView()
     }
