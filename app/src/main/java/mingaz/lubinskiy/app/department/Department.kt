@@ -1,6 +1,9 @@
 package mingaz.lubinskiy.app.department
 
+import mingaz.lubinskiy.app.employee.Employee
+import java.io.Serializable
+
 data class Department(
-    val id: Long,
-    val name: String
-)
+    var name: String? = null,
+    var employees: MutableList<Employee>? = null
+): Serializable

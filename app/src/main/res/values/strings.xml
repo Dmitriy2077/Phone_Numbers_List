@@ -4,30 +4,15 @@
     <string name="db_url">https://mingaz-phone-numbers-default-rtdb.europe-west1.firebasedatabase.app/</string>
     <string name="empty" />
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="appbar_launch">Телефонный справочник УП \"Мингаз\"</string>
-    <string name="hide_login">Фамилия Имя Отчество</string>
-    <string name="hide_password">Табельный номер(? цифр)</string>
+    <string name="hide_login">Фамилия Имя Отчество…</string>
+    <string name="hide_password">Табельный номер…</string>
     <string name="btn_login">Вход</string>
 
     <string name="appbar_dep_list">УП \"Мингаз\" - Подразделения</string>
 
-    <string name="flower1_name">Rose</string>
-    <string name="flower2_name">Freesia</string>
-    <string name="flower3_name">Lily</string>
-    <string name="flower4_name">Sunflower</string>
-    <string name="flower5_name">Peony</string>
-    <string name="flower6_name">Daisy</string>
-    <string name="flower7_name">Lilac</string>
-    <string name="flower8_name">Marigold</string>
-    <string name="flower9_name">Poppy</string>
-    <string name="flower10_name">Daffodil</string>
+    <string name="employee_info_toolbar">Фамилия Имя Отчество</string>
+    <string name="employees_list_toolbar">Подразделение</string>
 
+    <string name="position_hide">Должность:</string>
 </resources>

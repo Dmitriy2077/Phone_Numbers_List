@@ -2,125 +2,136 @@ package mingaz.lubinskiy.app.department
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.RecyclerView
-import mingaz.lubinskiy.app.OnItemClickListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import mingaz.lubinskiy.app.employee.Employee
 import mingaz.lubinskiy.app.R
+import mingaz.lubinskiy.app.databinding.ActivityDepartmentsListBinding
 import mingaz.lubinskiy.app.employee.EmployeesListActivity
-import java.util.*
 
+const val DEPARTMENT = "currentDepartment"
 
-/*const val FLOWER_ID = "flower id"
-const val FLOWER_NAME = "name"
-const val FLOWER_DESCRIPTION = "description"*/
-const val DEPARTMENT_NAME = "departmentName"
-
-class DepartmentsListActivity : AppCompatActivity() {
-    // creating variables for our ui components.
-    private lateinit var departmentRV: RecyclerView
-
-    // variable for our adapter class and array list
-    private lateinit var departmentsAdapter: DepartmentsAdapter
-    private lateinit var departmentsArrayList: ArrayList<Department>
-
-    //lateinit var searchView: SearchView
+class DepartmentsListActivity : AppCompatActivity(), DepartmentsAdapter.OnItemClickListener {
+    private lateinit var binding: ActivityDepartmentsListBinding
+    var adapter = DepartmentsAdapter(this)
+    lateinit var departmentsList: MutableList<Department>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_departments_list)
-        setSupportActionBar(findViewById(R.id.departments_toolbar))
-        // calling method to build recycler view.
+        binding = ActivityDepartmentsListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.departmentsToolbar)
+
+        val database = Firebase.database(getString(R.string.db_url))
+        val ref = database.getReference("departments")
+        ref.keepSynced(true)// подкачивание изменений
+        Thread { onChangeListener(ref) }.start()
+
         buildRecyclerView()
     }
 
-    private fun buildRecyclerView() {
+    override fun onClick(department: Department) {
+        startActivity(
+            Intent(
+                this@DepartmentsListActivity,
+                EmployeesListActivity::class.java
+            ).apply {
+                putExtra(DEPARTMENT, department)
+            })
+    }
 
-        // initializing our variables.
-        departmentRV = findViewById(R.id.departments_list_rv)
-        // below line we are creating a new array list
-        departmentsArrayList = ArrayList()
-        departmentsArrayList = departmentsList()
-
-        // below line is to add data to our array list.
-        /*departmentsArrayList.add(Department(1, "First Member"))
-        departmentsArrayList.add(Department(2, "Second Member"))
-        departmentsArrayList.add(Department(3, "Third Member"))
-        departmentsArrayList.add(Department(4, "Fourth Member"))
-        departmentsArrayList.add(Department(5, "Fifth Member"))*/
-
-        // initializing our adapter class.
-        departmentsAdapter = DepartmentsAdapter(departmentsArrayList)
-
-        // setting adapter to our recycler view.
-        departmentRV.adapter = departmentsAdapter
-        departmentsAdapter.setOnClickListener(object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                /*Toast.makeText(
-                    this@DepartmentListActivity,
-                    "OnClick - $position",
-                    Toast.LENGTH_LONG
-                ).show()*/
-                val intent = Intent(this@DepartmentsListActivity, EmployeesListActivity::class.java)
-                val departmentName = departmentsArrayList[position].name
-                intent.putExtra(DEPARTMENT_NAME, departmentName)
-                startActivity(intent)
-            }
-        })
-        //departmentsAdapter.setOnClickListener(onClick())
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // inside inflater we are inflating our menu file.
         menuInflater.inflate(R.menu.menu_departments, menu)
-
-        // below line is to get our menu item.
-        val searchItem = menu.findItem(R.id.action_search)
-
-        // getting search view of our item.
-        val searchView = searchItem.actionView as SearchView
-
-        // below line is to call set on query text listener method.
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
+        val search = menu.findItem(R.id.action_search)
+        val sv = search.actionView as SearchView
+        sv.queryHint = "Поиск..."
+        sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String?): Boolean {
+                return true
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                // inside on query text change method we are
-                // calling a method to filter our recycler view.
-                filter(newText)
-                //Toast.makeText(applicationContext, "onQueryTextChange", Toast.LENGTH_LONG).show()
-                return false
+            override fun onQueryTextChange(s: String?): Boolean {
+                filterList(s)
+                return true
             }
         })
-        return true
-
+        return super.onCreateOptionsMenu(menu)
     }
 
-    private fun filter(text: String) {
-        // creating a new array list to filter our data.
+    private fun filterList(input: String?) {
         val filteredList = ArrayList<Department>()
-
-        // running a for loop to compare elements.
-        for (item in departmentsArrayList) {
-            // checking if the entered string matched with any item of our recycler view.
-            if (item.name.lowercase(Locale.getDefault())
-                    .contains(text.lowercase(Locale.getDefault()))
-            ) {
-                // if the item is matched we are adding it to our filtered list.
+        for (item in departmentsList) {
+            if (item.name?.lowercase()!!.contains(input?.lowercase() ?: "-")) {
                 filteredList.add(item)
             }
         }
         if (filteredList.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
-            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show()
-        } else {
-            // at last we are passing that filtered list to our adapter class.
-            departmentsAdapter.filterList(filteredList)
+            Toast.makeText(this, "Таких подразделений нет!", Toast.LENGTH_SHORT)
+                .show()
         }
+        adapter.submitList(filteredList)
+    }
+
+    private fun buildRecyclerView() = with(binding) {
+        departmentsListRv.adapter = adapter
+    }
+
+    private fun onChangeListener(ref: DatabaseReference) {
+        // Read from the database
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            // This method is called once with the initial value and again
+            // whenever data at this location is updated.
+            override fun onDataChange(snapshot: DataSnapshot) {
+                departmentsList = createDepartmentsList(snapshot)
+                departmentsList.sortWith(compareBy { it.name })
+                adapter.submitList(departmentsList)
+            }
+
+            // Failed to read value
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("Departments2077", "Failed to read value.", error.toException())
+            }
+        })
+    }
+
+    fun createDepartmentsList(snapshot: DataSnapshot): MutableList<Department> {
+        val list: MutableList<Department> = mutableListOf()
+        snapshot.children.forEach { departments ->
+            var departmentsName: String
+            var employeesList: MutableList<Employee> = mutableListOf()
+            departments.children.forEach { department ->
+                if (employeesList.isEmpty()) {
+                    employeesList = createEmployeesList(department)
+                }
+                if (department.value?.javaClass == String::class.java) {
+                    departmentsName = department.value.toString()
+                    list.add(Department(departmentsName, employeesList))
+                }
+            }
+        }
+        return list
+    }
+
+    private fun createEmployeesList(employee: DataSnapshot): MutableList<Employee> {
+        val list: MutableList<Employee> = mutableListOf()
+        employee.children.forEach {
+            val item = it.getValue(Employee::class.java)
+            if (item != null) list.add(item)
+        }
+        return list
     }
 }

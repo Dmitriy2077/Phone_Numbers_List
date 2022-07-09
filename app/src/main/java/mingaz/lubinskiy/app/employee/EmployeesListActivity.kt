@@ -4,62 +4,52 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
-import mingaz.lubinskiy.app.OnItemClickListener
-import mingaz.lubinskiy.app.R
-import mingaz.lubinskiy.app.department.DEPARTMENT_NAME
-import kotlin.collections.ArrayList
+import mingaz.lubinskiy.app.databinding.ActivityEmployeesListBinding
+import mingaz.lubinskiy.app.department.Department
+import mingaz.lubinskiy.app.department.DEPARTMENT
+import mingaz.lubinskiy.app.employee_info.EMPLOYEE
+import mingaz.lubinskiy.app.employee_info.EmployeeInfoActivity
 
-class EmployeesListActivity : AppCompatActivity() {
-    private lateinit var employeeRV: RecyclerView
-
-    // variable for our adapter class and array list
-    private lateinit var employeesAdapter: EmployeesAdapter
-    private lateinit var employeesArrayList: ArrayList<Employee>
+class EmployeesListActivity : AppCompatActivity(), EmployeesAdapter.OnItemClickListener {
+    private lateinit var binding: ActivityEmployeesListBinding
+    private var adapter = EmployeesAdapter(this)
+    private var employeesList: MutableList<Employee>? = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_employees_list)
-        val toolbar = findViewById<Toolbar>(R.id.employee_toolbar)
-        val title = findViewById<TextView>(R.id.title_toolbar)
-        setSupportActionBar(toolbar)
+        binding = ActivityEmployeesListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.employeeToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val bundle: Bundle = intent.extras!!
-        val eName = bundle.get(DEPARTMENT_NAME).toString()
-        title.text = eName
-        title.isSelected = true
+        val department = intent.getSerializableExtra(DEPARTMENT) as Department
+        employeesList = department.employees
+        binding.titleToolbar.text = department.name.toString()
+        binding.titleToolbar.isSelected = true
+
         buildRecyclerView()
     }
 
-    private fun buildRecyclerView() {
-        // initializing our variables.
-        employeeRV = findViewById(R.id.employees_list_rv)
-        // below line we are creating a new array list
-        employeesArrayList = ArrayList()
-        employeesArrayList = employeesList()
-
-        // initializing our adapter class.
-        employeesAdapter = EmployeesAdapter(employeesArrayList)
-
-        // setting adapter to our recycler view.
-        employeeRV.adapter = employeesAdapter
-        employeesAdapter.setOnClickListener(object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val intent = Intent(this@EmployeesListActivity, EmployeeInfoActivity::class.java)
-                val employeeName = employeesArrayList[position].fullName
-                intent.putExtra(EMPLOYEE_NAME, employeeName)
-                startActivity(intent)
-            }
-        })
+    override fun onClick(employee: Employee) {
+        startActivity(
+            Intent(
+                this,
+                EmployeeInfoActivity::class.java
+            ).apply {
+                putExtra(EMPLOYEE, employee)
+            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home){
+        if (item.itemId == android.R.id.home) {
             onBackPressed()
         }
         return true
+    }
+
+    private fun buildRecyclerView() = with(binding) {
+        employeesList?.sortWith(compareBy { it.name })
+        adapter.submitList(employeesList)
+        employeesListRv.adapter = adapter
     }
 }

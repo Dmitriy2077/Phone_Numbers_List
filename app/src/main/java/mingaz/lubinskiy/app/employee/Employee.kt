@@ -1,7 +1,9 @@
 package mingaz.lubinskiy.app.employee
 
-data class Employee (
-    val id: Long,
-    val fullName: String,
-    val position: String
-)
+import mingaz.lubinskiy.app.employee_info.EmployeeInfo
+import java.io.Serializable
+
+data class Employee(
+    var name: String? = null,
+    var info: EmployeeInfo? = null
+) :Serializable

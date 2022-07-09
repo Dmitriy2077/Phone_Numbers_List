@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".employee.EmployeesListActivity">
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/employee_toolbar"
         android:layout_width="match_parent"
@@ -29,6 +28,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
+            android:text="@string/employees_list_toolbar"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
