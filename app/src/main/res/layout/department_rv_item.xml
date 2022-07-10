@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:background="@color/dark_blue"
     android:elevation="8dp"
     app:cardCornerRadius="8dp">
 
@@ -11,11 +12,12 @@
         android:id="@+id/department_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="3dp"
+        android:minHeight="50dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="6dp"
-        android:lineSpacingExtra="3dp"
         android:text="@string/app_name"
         android:textColor="@color/black"
-        android:textSize="18sp"/>
-
+        android:textSize="18sp" />
 </androidx.cardview.widget.CardView>

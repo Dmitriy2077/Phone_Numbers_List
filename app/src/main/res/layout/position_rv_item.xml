@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/dark_dark_blue"
+    android:minHeight="50dp"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/employee_positionName"
@@ -25,5 +28,4 @@
         android:text="@string/app_name"
         android:textColor="@color/black"
         android:textSize="18sp" />
-
 </LinearLayout>

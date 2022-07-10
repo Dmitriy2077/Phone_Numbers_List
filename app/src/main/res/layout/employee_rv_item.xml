@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:background="@color/dark_blue"
     android:elevation="8dp"
     app:cardCornerRadius="8dp">
 
@@ -31,5 +32,4 @@
             android:textSize="14sp"
             android:textStyle="italic" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

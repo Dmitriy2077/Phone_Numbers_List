@@ -13,13 +13,14 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/ToolbarWithArrow"
         app:layout_constraintBottom_toTopOf="@+id/employee_info_rv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="ФИО"
-        app:titleTextColor="@color/white">
+        app:titleTextColor="@color/white"
+        app:subtitleTextColor="@color/white">
 
         <TextView
             android:id="@+id/title_toolbar"
@@ -40,8 +41,9 @@
         android:id="@+id/employee_info_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingTop="10dp"
+        android:paddingVertical="10dp"
         app:layoutManager="LinearLayoutManager"
+        android:paddingHorizontal="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

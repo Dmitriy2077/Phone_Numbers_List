@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         val s = getSharedPreferences("userData", Context.MODE_PRIVATE)
 
         binding.login.setOnClickListener {
-            startActivity(Intent(this, DepartmentsListActivity::class.java))
+            //startActivity(Intent(this, DepartmentsListActivity::class.java))
             onClick(binding.username.text.toString(), binding.password.text.toString())
 
             s.edit().apply {
@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
             if (!validUser)
-                Toast.makeText(context, "ФИО или/и Табельный номер введен/ы неверно", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "ФИО или/и Табельный номер введен/ы неверно", Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(context, "ФИО или/и Табельный номер не заполнен/ы", Toast.LENGTH_LONG)
                 .show()
