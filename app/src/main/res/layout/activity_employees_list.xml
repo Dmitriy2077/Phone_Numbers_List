@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_white"
+    android:background="@color/main_background"
     android:orientation="vertical"
-    tools:context=".employee.EmployeesListActivity">
+    tools:context=".ui.activities.EmployeesListActivity">
+    <!--    tools:context=".employee.EmployeesListActivity">-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/employee_toolbar"
@@ -38,6 +39,7 @@
         android:id="@+id/employees_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

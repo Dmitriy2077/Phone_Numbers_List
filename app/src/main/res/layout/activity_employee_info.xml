@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_white"
-    tools:context=".employee_info.EmployeeInfoActivity">
+    android:background="@color/main_background"
+    tools:context=".ui.activities.EmployeeInfoActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/employee_info_toolbar"
@@ -44,6 +44,7 @@
         android:paddingVertical="10dp"
         app:layoutManager="LinearLayoutManager"
         android:paddingHorizontal="8dp"
+        android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

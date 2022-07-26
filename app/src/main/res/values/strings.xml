@@ -5,14 +5,19 @@
     <string name="empty" />
     <!-- Strings related to login -->
     <string name="appbar_launch">Телефонный справочник УП \"Мингаз\"</string>
-    <string name="hide_login">Фамилия Имя Отчество…</string>
-    <string name="hide_password">Табельный номер…</string>
-    <string name="btn_login">Вход</string>
+    <string name="hide_login">Фамилия Имя Отчество</string>
+    <string name="hide_password">Табельный номер</string>
+    <string name="btn_login">Войти</string>
 
-    <string name="appbar_dep_list">УП \"Мингаз\" - Подразделения</string>
+    <string name="appbar_dep_list">УП \"Мингаз\" Подразделения</string>
+    <string name="appbar_emp_list">УП \"Мингаз\" Сотрудники</string>
+
+    <string name="menu_item_dep">Подразделения</string>
+    <string name="menu_item_emp">Сотрудники</string>
 
     <string name="employee_info_toolbar">Фамилия Имя Отчество</string>
     <string name="employees_list_toolbar">Подразделение</string>
 
     <string name="position_hide">Должность:</string>
+    <string name="current_department">Служба главного энергетика, метрологического обеспечения и охраны окружающей среды (СГЭМОиООС)</string>
 </resources>

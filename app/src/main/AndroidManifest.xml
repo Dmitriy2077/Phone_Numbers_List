@@ -10,15 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
         <activity
-            android:name=".employee_info.EmployeeInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".employee.EmployeesListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".department.DepartmentsListActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -27,6 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activities.DepartmentsEmployeesListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.activities.EmployeesListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.EmployeeInfoActivity"
+            android:exported="false" />
     </application>
-
 </manifest>

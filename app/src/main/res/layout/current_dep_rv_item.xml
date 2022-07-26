@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_view"
+    style="@style/CardViewItemInfo"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/CardViewItemInfo">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:minHeight="50dp"
-        android:gravity="center_vertical">
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/employee_numberName"
+            android:id="@+id/current_dep_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="3dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="6dp"
-            android:text="@string/app_name"
+            android:text="@string/menu_item_dep"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/employee_number"
-            android:layout_width="match_parent"
+            android:id="@+id/current_department"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:lineSpacingExtra="3dp"
+            android:paddingHorizontal="8dp"
             android:paddingVertical="6dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:gravity="end"
-            android:text="@string/app_name"
+            android:text="@string/current_department"
             android:textColor="@color/black"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

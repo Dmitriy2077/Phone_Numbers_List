@@ -13,13 +13,14 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import mingaz.lubinskiy.app.databinding.ActivityLoginBinding
-import mingaz.lubinskiy.app.department.DepartmentsListActivity
+import mingaz.lubinskiy.app.entities.Login
+import mingaz.lubinskiy.app.ui.activities.DepartmentsEmployeesListActivity
+import mingaz.lubinskiy.app.utils.USERNAME_VALUE
+import mingaz.lubinskiy.app.utils.USERNAME_PASSWORD
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     var userList: MutableList<Login> = mutableListOf()
-    private val usernameValue = "CURRENT_USERNAME"
-    private val passwordValue = "CURRENT_PASSWORD"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +35,16 @@ class LoginActivity : AppCompatActivity() {
         val s = getSharedPreferences("userData", Context.MODE_PRIVATE)
 
         binding.login.setOnClickListener {
-            //startActivity(Intent(this, DepartmentsListActivity::class.java))
             onClick(binding.username.text.toString(), binding.password.text.toString())
 
             s.edit().apply {
-                putString(usernameValue, binding.username.text.toString())
-                putString(passwordValue, binding.password.text.toString())
+                putString(USERNAME_VALUE, binding.username.text.toString())
+                putString(USERNAME_PASSWORD, binding.password.text.toString())
             }.apply()
         }
 
-        binding.username.setText(s.getString(usernameValue, "").toString())
-        binding.password.setText(s.getString(passwordValue, "").toString())
+        binding.username.setText(s.getString(USERNAME_VALUE, "").toString())
+        binding.password.setText(s.getString(USERNAME_PASSWORD, "").toString())
     }
 
     override fun onStop() {
@@ -54,20 +54,31 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onClick(username: String, password: String) = with(binding) {
         val context = this@LoginActivity
-        val intent = Intent(context, DepartmentsListActivity::class.java)
+        val intent = Intent(
+            context,
+            DepartmentsEmployeesListActivity::class.java
+        )
 
         if (username.isNotEmpty() && password.isNotEmpty()) {
             var validUser = false
             userList.forEach { user ->
-                if (username == user.name && password.toInt() == user.password) {
+                if (username.lowercase()
+                        .trim() == user.name?.lowercase() && password.toInt() == user.password
+                ) {
                     validUser = true
                     startActivity(intent)
-                } else if ((username != user.name || password.toInt() != user.password) && !validUser) {
+                } else if ((username.lowercase().trim() != user.name?.lowercase()
+                            || password.toInt() != user.password) && !validUser
+                ) {
                     validUser = false
                 }
             }
             if (!validUser)
-                Toast.makeText(context, "ФИО или/и Табельный номер введен/ы неверно", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "ФИО или/и Табельный номер введен/ы неверно",
+                    Toast.LENGTH_LONG
+                ).show()
         } else {
             Toast.makeText(context, "ФИО или/и Табельный номер не заполнен/ы", Toast.LENGTH_LONG)
                 .show()
@@ -84,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.d("Login2077", "Failed to read value", error.toException())
+                Log.d("Login01234", "Failed to read value", error.toException())
             }
         })
     }
