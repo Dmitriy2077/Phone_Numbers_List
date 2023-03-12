@@ -4,18 +4,24 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import mingaz.lubinskiy.app.databinding.ActivityEmployeesListBinding
 import mingaz.lubinskiy.app.entities.Department
 import mingaz.lubinskiy.app.entities.Employee
 import mingaz.lubinskiy.app.ui.adapters.employee.EmployeesAdapter
-import mingaz.lubinskiy.app.utils.DEPARTMENT
-import mingaz.lubinskiy.app.utils.EMPLOYEE
+import mingaz.lubinskiy.app.utils.*
 
-class EmployeesListActivity : AppCompatActivity(), EmployeesAdapter.OnItemClickListener {
+class EmployeesListActivity : AppCompatActivity(), EmployeesAdapter.OnItemClickListener,
+EmployeesAdapter.OnItemLongClickListener{
     private lateinit var binding: ActivityEmployeesListBinding
     private lateinit var department: Department
-    private var adapter = EmployeesAdapter(this)
+    private var adapter = EmployeesAdapter(this, this)
     private var employeesList: MutableList<Employee>? = mutableListOf()
+    var isAdmin = IS_ADMIN
+    private val database = Firebase.database
+    lateinit var reference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +31,7 @@ class EmployeesListActivity : AppCompatActivity(), EmployeesAdapter.OnItemClickL
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         department = intent.getSerializableExtra(DEPARTMENT) as Department
+        reference = database.getReferenceFromUrl(department.referenceUrl.toString())
         employeesList = department.employees
         binding.titleToolbar.text = department.name.toString()
         binding.titleToolbar.isSelected = true
@@ -46,6 +53,32 @@ class EmployeesListActivity : AppCompatActivity(), EmployeesAdapter.OnItemClickL
                 putExtra(DEPARTMENT, department)
                 putExtra(EMPLOYEE, employee)
             })
+    }
+
+    override fun onLongClickEmployee(employee: Employee, position: Int) {
+        if (isAdmin) {
+            DialogManager.changeEmpNamePosDialog(
+                this,
+                employee,
+                object : DialogManager.EmpListener {
+                    override fun onEmpClick(name: String?, empPosition: String?) {
+                        employeesList?.forEach {
+                            if (it == employee) {
+                                it.name = name
+                                it.info?.position = empPosition
+                            }
+                        }
+                        val setEmpNameLink =
+                            reference.database.getReferenceFromUrl("${employee.referenceUrl.toString()}/name")
+                        setEmpNameLink.setValue(name)
+                        val setEmpPosLink =
+                            reference.database.getReferenceFromUrl("${employee.referenceUrl.toString()}/info/position")
+                        setEmpPosLink.setValue(empPosition)
+                        buildRecyclerView()
+                        adapter.submitList(employeesList)
+                    }
+                })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -8,15 +8,21 @@ import androidx.recyclerview.widget.RecyclerView
 import mingaz.lubinskiy.app.databinding.DepartmentRvItemBinding
 import mingaz.lubinskiy.app.entities.Department
 
-class DepartmentsAdapter(private val listener: OnItemClickListener) :
+class DepartmentsAdapter(private val listener: OnItemClickListener,
+                         private val longListener: OnItemLongClickListener) :
     ListAdapter<Department, DepartmentsAdapter.ItemHolder>(ItemComparator()) {
 
     class ItemHolder(private val binding: DepartmentRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(department: Department, listener: OnItemClickListener) = with(binding) {
+        fun bind(department: Department, listener: OnItemClickListener,
+                 longListener: OnItemLongClickListener) = with(binding) {
             departmentName.text = department.name
             itemView.setOnClickListener {
                 listener.onClickDepartment(department)
+            }
+            itemView.setOnLongClickListener {
+                longListener.onLongClickDepartment(department, layoutPosition)
+                return@setOnLongClickListener true
             }
         }
 
@@ -44,10 +50,14 @@ class DepartmentsAdapter(private val listener: OnItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), listener, longListener)
     }
 
     interface OnItemClickListener {
         fun onClickDepartment(department: Department)
+    }
+
+    interface OnItemLongClickListener {
+        fun onLongClickDepartment(department: Department, position: Int)
     }
 }

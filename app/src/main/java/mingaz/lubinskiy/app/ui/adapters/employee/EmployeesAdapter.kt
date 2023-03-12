@@ -8,16 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import mingaz.lubinskiy.app.databinding.EmployeeRvItemBinding
 import mingaz.lubinskiy.app.entities.Employee
 
-class EmployeesAdapter(private val listener: OnItemClickListener) :
+class EmployeesAdapter(private val listener: OnItemClickListener,
+                       private val longListener: OnItemLongClickListener
+) :
     ListAdapter<Employee, EmployeesAdapter.ItemHolder>(ItemComparator()) {
 
     class ItemHolder(private val binding: EmployeeRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(employee: Employee, listener: OnItemClickListener) = with(binding) {
+        fun bind(employee: Employee, listener: OnItemClickListener,
+                 longListener: OnItemLongClickListener) = with(binding) {
             employeeName.text = employee.name
             employeePosition.text = employee.info?.position
             itemView.setOnClickListener {
                 listener.onClickEmployee(employee)
+            }
+            itemView.setOnLongClickListener {
+                longListener.onLongClickEmployee(employee, layoutPosition)
+                return@setOnLongClickListener true
             }
         }
 
@@ -45,10 +52,14 @@ class EmployeesAdapter(private val listener: OnItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), listener, longListener)
     }
 
     interface OnItemClickListener {
         fun onClickEmployee(employee: Employee)
+    }
+
+    interface OnItemLongClickListener {
+        fun onLongClickEmployee(employee: Employee, position: Int)
     }
 }

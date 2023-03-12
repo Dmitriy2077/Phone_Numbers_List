@@ -14,23 +14,28 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import mingaz.lubinskiy.app.entities.Employee
 import mingaz.lubinskiy.app.R
 import mingaz.lubinskiy.app.databinding.ActivityDepartmentsListBinding
 import mingaz.lubinskiy.app.entities.Department
+import mingaz.lubinskiy.app.entities.Employee
 import mingaz.lubinskiy.app.ui.adapters.department.DepartmentsAdapter
 import mingaz.lubinskiy.app.ui.adapters.employee.EmployeesAdapter
 import mingaz.lubinskiy.app.utils.DEPARTMENT
+import mingaz.lubinskiy.app.utils.DialogManager
 import mingaz.lubinskiy.app.utils.EMPLOYEE
+import mingaz.lubinskiy.app.utils.IS_ADMIN
 
 class DepartmentsEmployeesListActivity : AppCompatActivity(),
-    DepartmentsAdapter.OnItemClickListener, EmployeesAdapter.OnItemClickListener {
+    DepartmentsAdapter.OnItemClickListener, DepartmentsAdapter.OnItemLongClickListener,
+    EmployeesAdapter.OnItemClickListener, EmployeesAdapter.OnItemLongClickListener {
     private lateinit var binding: ActivityDepartmentsListBinding
-    var departmentsAdapter = DepartmentsAdapter(this)
-    var employeesAdapter = EmployeesAdapter(this)
+    var departmentsAdapter = DepartmentsAdapter(this, this)
+    var employeesAdapter = EmployeesAdapter(this, this)
     private lateinit var departmentsList: MutableList<Department>
     private lateinit var employeesList: MutableList<Employee>
     var isDepartment = true
+    var isAdmin = IS_ADMIN
+    private lateinit var reference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,7 @@ class DepartmentsEmployeesListActivity : AppCompatActivity(),
 
         val database = Firebase.database(getString(R.string.db_url))
         val ref = database.getReference("departments")
+        reference = ref
         ref.keepSynced(true)// подкачивание изменений
         Thread { onChangeListener(ref) }.start()
 
@@ -57,8 +63,27 @@ class DepartmentsEmployeesListActivity : AppCompatActivity(),
         finishAffinity()
     }
 
+    override fun onLongClickDepartment(department: Department, position: Int) {
+        if (isAdmin) {
+            DialogManager.changeDepNameDialog(this, department, object : DialogManager.Listener {
+                override fun onClick(name: String?) {
+                    departmentsList.forEach {
+                        if (it == department) {
+                            it.name = name
+                        }
+                    }
+                    val setLink =
+                        reference.database.getReferenceFromUrl(department.referenceUrl.toString())
+                    setLink.setValue(name)
+                    buildRecyclerView()
+                    departmentsAdapter.submitList(departmentsList)
+                }
+            })
+        }
+    }
+
     override fun onClickEmployee(employee: Employee) {
-        departmentsList.forEach{ dep ->
+        departmentsList.forEach { dep ->
             dep.employees?.forEach { emp ->
                 if (emp == employee) {
                     startActivity(
@@ -71,6 +96,32 @@ class DepartmentsEmployeesListActivity : AppCompatActivity(),
                         })
                 }
             }
+        }
+    }
+
+    override fun onLongClickEmployee(employee: Employee, position: Int) {
+        if (isAdmin) {
+            DialogManager.changeEmpNamePosDialog(
+                this,
+                employee,
+                object : DialogManager.EmpListener {
+                    override fun onEmpClick(name: String?, empPosition: String?) {
+                        employeesList.forEach {
+                            if (it == employee) {
+                                it.name = name
+                                it.info?.position = empPosition
+                            }
+                        }
+                        val setEmpNameLink =
+                            reference.database.getReferenceFromUrl("${employee.referenceUrl.toString()}/name")
+                        setEmpNameLink.setValue(name)
+                        val setEmpPosLink =
+                            reference.database.getReferenceFromUrl("${employee.referenceUrl.toString()}/info/position")
+                        setEmpPosLink.setValue(empPosition)
+                        buildRecyclerView()
+                        employeesAdapter.submitList(employeesList)
+                    }
+                })
         }
     }
 
@@ -179,7 +230,7 @@ class DepartmentsEmployeesListActivity : AppCompatActivity(),
                 }
                 if (department.value?.javaClass == String::class.java) {
                     departmentsName = department.value.toString()
-                    list.add(Department(departmentsName, employeesList))
+                    list.add(Department(departmentsName, employeesList, department.ref.toString()))
                 }
             }
         }
@@ -191,6 +242,7 @@ class DepartmentsEmployeesListActivity : AppCompatActivity(),
         employee.children.forEach {
             val item = it.getValue(Employee::class.java)
             if (item != null) {
+                item.referenceUrl = it.ref.toString()
                 list.add(item)
                 employeesList.add(item)
             }

@@ -10,5 +10,8 @@
     <color name="purple_p">#FF340E70</color>
     <color name="purple_p_l">#FF653a9f</color>
     <color name="purple_p_d">#FF090044</color>
+    <color name="blue_p">#FF0e508c</color>
+    <color name="blue_p_l">#FF4e7cbd</color>
+    <color name="blue_p_d">#FF00295e</color>
     <color name="transparent">#00000000</color>
 </resources>

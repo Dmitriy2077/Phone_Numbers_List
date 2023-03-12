@@ -15,12 +15,14 @@ import com.google.firebase.ktx.Firebase
 import mingaz.lubinskiy.app.databinding.ActivityLoginBinding
 import mingaz.lubinskiy.app.entities.Login
 import mingaz.lubinskiy.app.ui.activities.DepartmentsEmployeesListActivity
-import mingaz.lubinskiy.app.utils.USERNAME_VALUE
 import mingaz.lubinskiy.app.utils.USERNAME_PASSWORD
+import mingaz.lubinskiy.app.utils.USERNAME_VALUE
+import mingaz.lubinskiy.app.utils.IS_ADMIN
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     var userList: MutableList<Login> = mutableListOf()
+    var adminUser: Login? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +30,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Firebase.database.setPersistenceEnabled(true)
-        val database = Firebase.database(getString(R.string.db_url))
+//        val database = Firebase.database(getString(R.string.db_url))
+        val database = Firebase.database
         val ref = database.getReference("login")
-        Thread { onChangeListener(ref) }.start()
+        Thread {
+            onChangeListener(ref)
+        }.start()
 
         val s = getSharedPreferences("userData", Context.MODE_PRIVATE)
 
@@ -58,6 +63,7 @@ class LoginActivity : AppCompatActivity() {
             context,
             DepartmentsEmployeesListActivity::class.java
         )
+//        startActivity(intent)
 
         if (username.isNotEmpty() && password.isNotEmpty()) {
             var validUser = false
@@ -66,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
                         .trim() == user.name?.lowercase() && password.toInt() == user.password
                 ) {
                     validUser = true
+                    if (user == adminUser) IS_ADMIN = true
                     startActivity(intent)
                 } else if ((username.lowercase().trim() != user.name?.lowercase()
                             || password.toInt() != user.password) && !validUser
@@ -85,10 +92,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun onChangeListener(ref: DatabaseReference) {
+    private fun onChangeListener(ref: DatabaseReference)   {
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach {
+                    if (it.key == "admin") {
+                        adminUser = it.getValue(Login::class.java)
+                    }
                     val user = it.getValue(Login::class.java)
                     if (user != null) userList.add(user)
                 }

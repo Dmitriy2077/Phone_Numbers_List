@@ -8,19 +8,31 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import mingaz.lubinskiy.app.databinding.NumberRvItemBinding
 
-class NumberAdapter(private val listener: OnItemClickListener) :
+class NumberAdapter(
+    private val listener: OnItemClickListener,
+    private val longListener: OnItemLongClickListener
+) :
     ListAdapter<HashMap<String, Long>, NumberAdapter.ItemHolder>(ItemComparator()) {
 
     class ItemHolder(private val binding: NumberRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             numbers: HashMap<String, Long>? = HashMap(),
-            listener: OnItemClickListener
+            listener: OnItemClickListener,
+            longListener: OnItemLongClickListener
         ) = with(binding) {
             employeeNumberName.text = formatString(numbers?.keys.toString())
             employeeNumber.text = formatString(numbers!!.values.toString())
             itemView.setOnClickListener {
                 listener.onClickNumber(employeeNumber)
+            }
+            itemView.setOnLongClickListener {
+                longListener.onLongClickNumber(
+                    employeeNumber.text.toString(),
+                    employeeNumberName.text.toString().dropLast(1),
+                    layoutPosition
+                )
+                return@setOnLongClickListener true
             }
         }
 
@@ -61,10 +73,14 @@ class NumberAdapter(private val listener: OnItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), listener, longListener)
     }
 
     interface OnItemClickListener {
         fun onClickNumber(view: TextView)
+    }
+
+    interface OnItemLongClickListener {
+        fun onLongClickNumber(number: String, name: String, position: Int)
     }
 }
